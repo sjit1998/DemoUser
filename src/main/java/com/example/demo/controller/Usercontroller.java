@@ -11,10 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,7 +31,7 @@ import com.example.demo.userresponse.UserResponse;
 //import antlr.collections.List;
 
 @RestController
-@RequestMapping("/user")
+//@RequestMapping("/user")
 
 public class Usercontroller {
 	@Autowired
@@ -62,7 +63,7 @@ public class Usercontroller {
 	    return "Saved";
 	  }*/
 	
-	@PostMapping(path="/add",produces=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="/add",produces=MediaType.APPLICATION_JSON_VALUE)
 	  public ResponseEntity<UserResponse> addNewUser (@RequestBody UserRequest request) {  
 	   User model = new User();
 	    //n.setId(id);
@@ -76,6 +77,26 @@ public class Usercontroller {
 		
 	    return new ResponseEntity<>( response,HttpStatus.OK);
 	  }
+	@PostMapping(value="/update/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
+	  public ResponseEntity<UserResponse> UpdateUser (@RequestBody UserRequest request,@PathVariable int id) {  
+	   User model = new User();
+	    model.setId(id);
+	    model.setName(request.getName());
+	    model.setEmail(request.getEmail());
+	    model=rep.save(model);
+	    UserResponse response = new UserResponse();
+	    response.setId(model.getId());
+	    response.setName(model.getName());
+	    response.setEmail(model.getEmail());
+		
+	    return new ResponseEntity<>( response,HttpStatus.OK);
+	  }
+	@RequestMapping(value="/delete/{id}",method = RequestMethod.GET)    
+    public String delete(@PathVariable int id){    
+    	rep.deleteById(id);     
+        return "sucess";    
+    }  
+
 
 	  /*@GetMapping(path="/all")
 	  public @ResponseBody Iterable<User> getAllUsers() {
