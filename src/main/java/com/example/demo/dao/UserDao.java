@@ -29,13 +29,5 @@ public class UserDao {
 		rep.deleteById(id);
 	}
 
-	public boolean check(User user) {
-		List<User> list=rep.findAll();
-		for (User u : list) {
-			if(user.getEmail().equals(u.getEmail()))
-				return true;
-		}
-		return false;
-	}
-
+	
 }
