@@ -52,14 +52,13 @@ public class UserController {
 	 * return new ResponseEntity<>(response, HttpStatus.OK); }
 	 */
 	@PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserResponse> addNewUser(@Valid @RequestBody UserRequest request, BindingResult bindingResult,
-			@ModelAttribute("model") User model, @ModelAttribute("response") UserResponse response) {
-		// User model = new User();
+	public ResponseEntity<UserResponse> addNewUser(@Valid @RequestBody UserRequest request, BindingResult bindingResult) {
+		User model = new User();
 		// n.setId(id);
 
 		model.setName(request.getName());
 		model.setEmail(request.getEmail());
-		// UserResponse response = new UserResponse();
+		UserResponse response = new UserResponse();
 		Optional<User> user=rep.findByEmail(model.getEmail());
 		if (user!=null) {
 			model = rep.save(model);
