@@ -37,8 +37,8 @@ import com.example.demo.userresponse.UserResponse;
 public class UserController {
 	@Autowired
 	private UserRepo rep;
-	@Autowired
-	private UserDao dao;
+	//@Autowired
+	//private UserDao dao;
 
 	/*
 	 * @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
