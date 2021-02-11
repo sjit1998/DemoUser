@@ -37,57 +37,56 @@ public class UserController {
 
 	/*
 	 * @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-	 * public ResponseEntity<UserResponse> addNewUser(@RequestBody UserRequest
-	 * request) { User model = new User(); // n.setId(id);
-	 * model.setName(request.getName()); model.setEmail(request.getEmail()); model =
-	 * rep.save(model); UserResponse response = new UserResponse();
+	 * public ResponseEntity<UserResponse> addNewUser(@Valid @RequestBody
+	 * UserRequest request) { User model = new User();
+	 * model.setName(request.getName()); model.setEmail(request.getEmail());
+	 * UserResponse response = new UserResponse(); Optional<User> user =
+	 * rep.findByEmail(model.getEmail()); if (!user.isPresent()) { model =
+	 * rep.save(model);
+	 * 
 	 * response.setId(model.getId()); response.setName(model.getName());
-	 * response.setEmail(model.getEmail());
+	 * response.setEmail(model.getEmail()); }
 	 * 
 	 * return new ResponseEntity<>(response, HttpStatus.OK); }
 	 */
 	@PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserResponse> addNewUser(@Valid @RequestBody UserRequest request) {
-		User model = new User();
-		model.setName(request.getName());
-		model.setEmail(request.getEmail());
-		UserResponse response = new UserResponse();
-		Optional<User> user = rep.findByEmail(model.getEmail());
-		if (!user.isPresent()) {
-			model = rep.save(model);
+	public ResponseEntity<UserResponse> addNewUser(@RequestBody UserRequest request) {
 
-			response.setId(model.getId());
-			response.setName(model.getName());
-			response.setEmail(model.getEmail());
-		}
-
+		UserResponse response = service.createUser(request);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	/*
+	 * @PutMapping(value = "/update/{id}", produces =
+	 * MediaType.APPLICATION_JSON_VALUE) public ResponseEntity<UserResponse>
+	 * UpdateUser(@RequestBody UserRequest request, @PathVariable Integer id) { User
+	 * model = new User(); model.setId(id); model.setName(request.getName());
+	 * model.setEmail(request.getEmail()); model = rep.save(model); UserResponse
+	 * response = new UserResponse(); response.setId(model.getId());
+	 * response.setName(model.getName()); response.setEmail(model.getEmail());
+	 * 
+	 * return new ResponseEntity<>(response, HttpStatus.OK); }
+	 */
 	@PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserResponse> UpdateUser(@RequestBody UserRequest request, @PathVariable Integer id) {
-		User model = new User();
-		model.setId(id);
-		model.setName(request.getName());
-		model.setEmail(request.getEmail());
-		model = rep.save(model);
-		UserResponse response = new UserResponse();
-		response.setId(model.getId());
-		response.setName(model.getName());
-		response.setEmail(model.getEmail());
-
+		UserResponse response = service.updateUser(request, id);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	/*
+	 * @DeleteMapping(value = "/delete/{id}", produces =
+	 * MediaType.APPLICATION_JSON_VALUE) public ResponseEntity<String>
+	 * delete(@PathVariable Integer id) { rep.deleteById(id); return new
+	 * ResponseEntity<>("sucess", HttpStatus.OK); }
+	 */
 	@DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> delete(@PathVariable Integer id) {
-		rep.deleteById(id);
-		return new ResponseEntity<>("sucess", HttpStatus.OK);
+	public ResponseEntity<Boolean> delete(@PathVariable Integer id) {
+		return new ResponseEntity<>(service.deleteUser(id), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<UserResponse>> list() {
-		
+
 		List<UserResponse> responses = service.getUserList();
 		return new ResponseEntity<>(responses, HttpStatus.OK);
 	}

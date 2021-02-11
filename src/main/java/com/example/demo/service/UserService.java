@@ -11,7 +11,7 @@ public interface UserService {
 
 	UserResponse createUser(UserRequest request);
 
-	UserResponse updateUser(UserRequest request, Long userId);
+	UserResponse updateUser(UserRequest request, Integer userId);
 
-	Boolean deleteUser(Long userId);
+	Boolean deleteUser(Integer userId);
 }

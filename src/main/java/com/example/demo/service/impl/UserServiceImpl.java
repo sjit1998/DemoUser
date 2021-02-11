@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +38,46 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserResponse createUser(UserRequest request) {
 		// TODO Auto-generated method stub
-		return null;
+		User model = new User();
+		model.setName(request.getName());
+		model.setEmail(request.getEmail());
+		UserResponse response = new UserResponse();
+		Optional<User> user = rep.findByEmail(model.getEmail());
+		if (user!=null) {
+			model = rep.save(model);
+
+			response.setId(model.getId());
+			response.setName(model.getName());
+			response.setEmail(model.getEmail());
+		}
+
+		return  response;
+		//return null;
 	}
 
 	@Override
-	public UserResponse updateUser(UserRequest request, Long userId) {
+	public UserResponse updateUser(UserRequest request, Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		User model = new User();
+		model.setId(id);
+		model.setName(request.getName());
+		model.setEmail(request.getEmail());
+		model = rep.save(model);
+		UserResponse response = new UserResponse();
+		response.setId(model.getId());
+		response.setName(model.getName());
+		response.setEmail(model.getEmail());
+
+		return response;
+		//return null;
 	}
 
 	@Override
-	public Boolean deleteUser(Long userId) {
+	public Boolean deleteUser(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		rep.deleteById(id);
+		return true;
+		//return null;
 	}
 
 }
